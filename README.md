@@ -1,3 +1,2 @@
 # devflow-api
-
-Minimal skeleton. Add real code locally with correct git identity.
+REST API for DevFlow, an open-source team task manager. Part of OwlGuild/DevFlow.
