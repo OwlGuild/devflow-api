@@ -9,6 +9,8 @@ REST API for **DevFlow**, the open-source team task-management product. Part of
 [![DRF](https://img.shields.io/badge/DRF-3.18-brightgreen.svg)](https://www.django-rest-framework.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
+**Live:** https://devflow-api-jtmi.onrender.com/health/ · [readiness](https://devflow-api-jtmi.onrender.com/health/ready/)
+
 ## Why this exists
 
 Task tools fail on two fronts: they are slow to respond, or they are a black box about what
@@ -36,6 +38,7 @@ curl http://localhost:8000/health/
 | Method | Path | Description |
 |---|---|---|
 | `GET` | `/health/` | liveness probe used by CI and uptime checks |
+| `GET` | `/health/ready/` | readiness probe, verifies the database |
 
 Endpoints are added behind the same contract: JSON in, JSON out, explicit status codes, and
 a test for every behaviour change.
