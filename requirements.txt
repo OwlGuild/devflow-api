@@ -1,12 +1,10 @@
-Django>=5.0,<5.1
+﻿Django>=5.2,<6.0
 djangorestframework
 psycopg2-binary
 gunicorn
 python-dotenv
 dj-database-url
 django-cors-headers
-redis
-celery
 whitenoise
 pytest
 pytest-django
