@@ -1,18 +1,31 @@
-from pathlib import Path
+﻿from pathlib import Path
 import os
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
+from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-secret-key')
-DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+DEBUG = os.environ.get('DEBUG', 'false').lower() in ('1', 'true', 'yes')
+
+_secret = os.environ.get('DJANGO_SECRET_KEY') or os.environ.get('SECRET_KEY')
+if _secret:
+    SECRET_KEY = _secret
+elif DEBUG:
+    SECRET_KEY = get_random_secret_key()
+else:
+    raise ImproperlyConfigured('Set DJANGO_SECRET_KEY when DEBUG is false')
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    if host.strip()
+]
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -75,5 +88,24 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+def _split(name, default):
+    return [
+        item.strip()
+        for item in os.environ.get(name, default).split(',')
+        if item.strip()
+    ]
+
+
+CORS_ALLOWED_ORIGINS = _split('CORS_ALLOWED_ORIGINS', 'http://localhost:3000')
+CSRF_TRUSTED_ORIGINS = _split('CSRF_TRUSTED_ORIGINS', 'http://localhost:3000')
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 REST_FRAMEWORK = {'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny']}
+
+# TLS is terminated by Render in front of the service and its health checks arrive
+# over plain HTTP, so HSTS and the SSL redirect are handled by the platform.
+SILENCED_SYSTEM_CHECKS = ['security.W004', 'security.W008']
