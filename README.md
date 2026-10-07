@@ -46,20 +46,28 @@ a test for every behaviour change.
 |---|---|
 | Runtime | Python 3.12 |
 | Framework | Django 5 + Django REST Framework |
-| Database | PostgreSQL 16 |
-| Queue | Celery + Redis |
-| Server | Gunicorn behind Nginx |
-| Container | Docker + docker-compose |
+| Database | PostgreSQL 16, SQLite for tests |
+| Server | Django dev server locally, Gunicorn in Docker |
+| Container | Docker + docker-compose (api, Postgres, Redis) |
 
 ## Testing
 
 ```bash
 pip install -r requirements.txt
 pytest -q
+# 5 passed
 ```
 
-The suite covers contract behaviour (status codes, response shape, routing) rather than
-implementation details, so refactors do not fail the build while a broken API would.
+The suite covers contract behaviour — status codes, response shape and routing — rather than
+implementation details, so refactors do not fail the build while a broken API would. CI runs
+`manage.py check` and `pytest` on every push.
+
+## Roadmap
+
+- Task, project and membership models with migrations
+- Authentication and workspace-scoped permissions
+- Celery workers on Redis for background jobs
+- OpenAPI schema published for `devflow-web` to generate types from
 
 ## Ownership
 
