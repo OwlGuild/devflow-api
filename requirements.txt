@@ -8,3 +8,5 @@ django-cors-headers
 redis
 celery
 whitenoise
+pytest
+pytest-django
