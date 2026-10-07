@@ -5,7 +5,7 @@ REST API for **DevFlow**, the open-source team task-management product. Part of
 
 [![CI](https://github.com/OwlGuild/devflow-api/actions/workflows/ci.yml/badge.svg)](https://github.com/OwlGuild/devflow-api/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![Django](https://img.shields.io/badge/django-5.0-092E20.svg)](https://www.djangoproject.com/)
+[![Django](https://img.shields.io/badge/django-5.2-092E20.svg)](https://www.djangoproject.com/)
 [![DRF](https://img.shields.io/badge/DRF-3.18-brightgreen.svg)](https://www.django-rest-framework.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
@@ -51,19 +51,19 @@ a test for every behaviour change.
 | Framework | Django 5 + Django REST Framework |
 | Database | PostgreSQL 16, SQLite for tests |
 | Server | Django dev server locally, Gunicorn in Docker |
-| Container | Docker + docker-compose (api, Postgres, Redis) |
+| Container | Docker + docker-compose (api, Postgres) |
 
 ## Testing
 
 ```bash
 pip install -r requirements.txt
 pytest -q
-# 5 passed
+# 8 passed
 ```
 
 The suite covers contract behaviour — status codes, response shape and routing — rather than
 implementation details, so refactors do not fail the build while a broken API would. CI runs
-`manage.py check` and `pytest` on every push.
+`manage.py check`, `check --deploy`, `pytest` and a Docker build on every push.
 
 ## Roadmap
 
