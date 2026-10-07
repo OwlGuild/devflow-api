@@ -18,6 +18,13 @@ class HealthEndpointTests(TestCase):
         response = self.client.post('/health/')
         self.assertEqual(response.status_code, 405)
 
+    def test_ready_reaches_the_database(self):
+        response = self.client.get('/health/ready/')
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload['status'], 'ok')
+        self.assertEqual(payload['database'], 'up')
+
     def test_health_route_is_registered(self):
         match = resolve('/health/')
         self.assertTrue(callable(match.func))
