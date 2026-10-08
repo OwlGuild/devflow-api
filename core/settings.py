@@ -97,7 +97,10 @@ def _split(name, default):
 
 
 CORS_ALLOWED_ORIGINS = _split('CORS_ALLOWED_ORIGINS', 'http://localhost:3000')
-CSRF_TRUSTED_ORIGINS = _split('CSRF_TRUSTED_ORIGINS', 'http://localhost:3000')
+CSRF_TRUSTED_ORIGINS = _split(
+    'CSRF_TRUSTED_ORIGINS',
+    os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000'),
+)
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
