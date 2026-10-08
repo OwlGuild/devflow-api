@@ -57,13 +57,15 @@ a test for every behaviour change.
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env
 pytest -q
 # 8 passed
 ```
 
 The suite covers contract behaviour — status codes, response shape and routing — rather than
 implementation details, so refactors do not fail the build while a broken API would. CI runs
-`manage.py check`, `check --deploy`, `pytest` and a Docker build on every push.
+`manage.py check`, `check --deploy --fail-level WARNING`, `pytest` and a Docker build on every
+push and pull request to `main`.
 
 ## Roadmap
 
